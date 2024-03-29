@@ -65,14 +65,11 @@ let editTaskText = (event) => {
 }
 
 let changeTextInTasks = (event) => {
-  if(event.target.value){
-    tasks.forEach((task) => {
-      if(Number(event.target.parentNode.id) === task.id){
-        task.text = event.target.value;
-      }
-    })
-  }
- 
+  tasks.forEach((task) => {
+    if(Number(event.target.parentNode.id) === task.id){
+      task.text = event.target.value;
+    }
+  })
 }
 
 let writeChanges = (event) => {
@@ -109,7 +106,7 @@ let markAllTask = (event) => {
 let deleteCompletedTasks = (event) => {
   tasks = tasks.filter((elem)=> !elem.isChecked)
   renderTask()
-  deleteCompletedTaskButton.checked = false;
+  deleteCompletedTaskButton.checked = false
 }
 
 addTaskButton.addEventListener('click', addTask);

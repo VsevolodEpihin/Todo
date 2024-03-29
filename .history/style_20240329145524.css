@@ -25,7 +25,7 @@ body{
 }
 
 .create-task input:focus{
-    outline: none;
+    
 }
 .create-task button{
     width: 40px;
@@ -74,13 +74,4 @@ li span{
 
 .hide{
     display: none;
-}
-.i-1{
-    width: 125px;
-    margin-left: 5px;
-    outline: none;
-}
-
-.task-container{
-    display: flex;
 }

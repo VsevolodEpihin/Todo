@@ -76,11 +76,5 @@ li span{
     display: none;
 }
 .i-1{
-    width: 125px;
-    margin-left: 5px;
-    outline: none;
-}
-
-.task-container{
-    display: flex;
+    width: 100px;
 }

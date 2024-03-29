@@ -5,7 +5,6 @@ const textTask = document.querySelector('.text');
 const listTaskContainer = document.querySelector('.task-container');
 const todoContainer = document.querySelector('.todo')
 const checkAllTasks = document.querySelector('.check-all-tasks')
-const deleteCompletedTaskButton = document.querySelector('.delete-all-tasks')
 
 let tasks = [];
 
@@ -65,14 +64,11 @@ let editTaskText = (event) => {
 }
 
 let changeTextInTasks = (event) => {
-  if(event.target.value){
-    tasks.forEach((task) => {
-      if(Number(event.target.parentNode.id) === task.id){
-        task.text = event.target.value;
-      }
-    })
-  }
- 
+  tasks.forEach((task) => {
+    if(Number(event.target.parentNode.id) === task.id){
+      task.text = event.target.value;
+    }
+  })
 }
 
 let writeChanges = (event) => {
@@ -99,17 +95,8 @@ let selectActionTask = (event) => {
 }
 
 let markAllTask = (event) => {
-  console.log(event.target.checked)
-  tasks.forEach((elem)=>{
-    elem.isChecked = event.target.checked;
-  })
-  renderTask()
-}
-
-let deleteCompletedTasks = (event) => {
-  tasks = tasks.filter((elem)=> !elem.isChecked)
-  renderTask()
-  deleteCompletedTaskButton.checked = false;
+  console.log(1)
+  console.log(event.target.value)
 }
 
 addTaskButton.addEventListener('click', addTask);
@@ -118,4 +105,3 @@ listTaskContainer.addEventListener('keydown',writeChanges)
 listTaskContainer.addEventListener('blur',writeChangesBlur,true)
 textTask.addEventListener('keydown',addTaskWithEnter)
 checkAllTasks.addEventListener('change',markAllTask)
-deleteCompletedTaskButton.addEventListener('click',deleteCompletedTasks)

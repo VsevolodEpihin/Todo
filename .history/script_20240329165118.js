@@ -4,8 +4,7 @@ const addTaskButton = document.querySelector('.add-task');
 const textTask = document.querySelector('.text');
 const listTaskContainer = document.querySelector('.task-container');
 const todoContainer = document.querySelector('.todo')
-const checkAllTasks = document.querySelector('.check-all-tasks')
-const deleteCompletedTaskButton = document.querySelector('.delete-all-tasks')
+const checkAllTasks = document.querySelector('.todo')
 
 let tasks = [];
 
@@ -54,6 +53,7 @@ let markTask = (event) => {
         task.isChecked = event.target.checked
       }
     })
+    console.log(tasks)
 }
 
 let editTaskText = (event) => {
@@ -65,18 +65,16 @@ let editTaskText = (event) => {
 }
 
 let changeTextInTasks = (event) => {
-  if(event.target.value){
-    tasks.forEach((task) => {
-      if(Number(event.target.parentNode.id) === task.id){
-        task.text = event.target.value;
-      }
-    })
-  }
- 
+  tasks.forEach((task) => {
+    if(Number(event.target.parentNode.id) === task.id){
+      task.text = event.target.value;
+    }
+  })
 }
 
 let writeChanges = (event) => {
   if(event.code === 'Enter'){
+    console.log(event.target)
     changeTextInTasks(event)
     renderTask()
   }
@@ -86,6 +84,7 @@ let writeChanges = (event) => {
 }
 
 let writeChangesBlur = (event) => {
+  console.log(event)
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
@@ -93,23 +92,10 @@ let writeChangesBlur = (event) => {
 }
 
 let selectActionTask = (event) => {
+  console.log(event.target.type)
   if (event.target.type === 'button') removeTask(event)
   if (event.target.type === 'checkbox') markTask(event)
   if (event.target.tagName === 'SPAN') editTaskText(event)
-}
-
-let markAllTask = (event) => {
-  console.log(event.target.checked)
-  tasks.forEach((elem)=>{
-    elem.isChecked = event.target.checked;
-  })
-  renderTask()
-}
-
-let deleteCompletedTasks = (event) => {
-  tasks = tasks.filter((elem)=> !elem.isChecked)
-  renderTask()
-  deleteCompletedTaskButton.checked = false;
 }
 
 addTaskButton.addEventListener('click', addTask);
@@ -117,5 +103,3 @@ listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
 listTaskContainer.addEventListener('blur',writeChangesBlur,true)
 textTask.addEventListener('keydown',addTaskWithEnter)
-checkAllTasks.addEventListener('change',markAllTask)
-deleteCompletedTaskButton.addEventListener('click',deleteCompletedTasks)

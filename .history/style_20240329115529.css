@@ -16,14 +16,10 @@ body{
 .create-task{
     background-color: white;
     border-radius: 25px;
-    display: flex;
-    justify-content: space-between;
 }
 .create-task input{
     border: none;
-    
 }
-
 .create-task input:focus{
     outline: none;
 }
@@ -74,13 +70,4 @@ li span{
 
 .hide{
     display: none;
-}
-.i-1{
-    width: 125px;
-    margin-left: 5px;
-    outline: none;
-}
-
-.task-container{
-    display: flex;
 }
