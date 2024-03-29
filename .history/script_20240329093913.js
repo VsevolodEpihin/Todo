@@ -1,4 +1,4 @@
-const DOUBLE_CLICK = 2;
+const DOUBLE_CLICK = 1;
 
 const addTaskButton = document.querySelector('.create-task__add');
 const textTask = document.querySelector('.create-task__text');
@@ -50,32 +50,19 @@ let markTask = (event) => {
 }
 
 let editTaskText = (event) => {
-  console.log(event)
+  
   if(event.detail === DOUBLE_CLICK ){
-    console.log(1)
     event.target.hidden = true;
     event.target.previousElementSibling.hidden = false
   }
 }
 
 let writeChanges = (event) => {
-  
-  console.log(event.target)
+  console.log(event.code)
   if(event.code === 'Enter'){
-    event.target.nextElementSibling.textContent = event.target.value
-    event.target.nextElementSibling.data = event.target.value
-    console.log('enter')
-    renderTask()
-  }
-  if(event.code === 'Escape'){
-    // event.target.nextElementSibling.textContent = event.target.nextElementSibling.data
-    // event.target.nextElementSibling.hidden = false;
-    // event.target.hidden = true;
-    // console.log('escape')
+    
   }
 }
-
-
 
 let selectActionTask = (event) => {
   if (event.target.type === 'button') removeTask(event)
@@ -89,15 +76,3 @@ let selectActionTask = (event) => {
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
-// listTaskContainer.addEventListener('blur',writeChanges,true)
-
-
-
-
-
-// tasks = tasks.map((task)=>{
-//   console.log(task.id,event.target.parentNode.id)
-//   if(task.id === Number(event.target.parentNode.id)){
-//     task.text = event.target.value;
-//   }
-// })

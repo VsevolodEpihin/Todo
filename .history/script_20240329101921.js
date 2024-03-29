@@ -1,4 +1,4 @@
-const DOUBLE_CLICK = 2;
+const DOUBLE_CLICK = 1;
 
 const addTaskButton = document.querySelector('.create-task__add');
 const textTask = document.querySelector('.create-task__text');
@@ -50,28 +50,32 @@ let markTask = (event) => {
 }
 
 let editTaskText = (event) => {
-  console.log(event)
+  
   if(event.detail === DOUBLE_CLICK ){
-    console.log(1)
     event.target.hidden = true;
     event.target.previousElementSibling.hidden = false
   }
 }
 
 let writeChanges = (event) => {
-  
-  console.log(event.target)
+  console.log(event)
   if(event.code === 'Enter'){
     event.target.nextElementSibling.textContent = event.target.value
-    event.target.nextElementSibling.data = event.target.value
-    console.log('enter')
-    renderTask()
+    event.target.nextElementSibling.hidden = false;
+    event.target.hidden = true;
+    console.log(1)
   }
   if(event.code === 'Escape'){
-    // event.target.nextElementSibling.textContent = event.target.nextElementSibling.data
-    // event.target.nextElementSibling.hidden = false;
-    // event.target.hidden = true;
-    // console.log('escape')
+    event.target.nextElementSibling.hidden = false;
+    event.target.hidden = true;
+    console.log(2)
+  }
+  if(event.type === 'blur' && event.code!=='Escape'){
+    console.log(event.target, event.target.value)
+    event.target.nextElementSibling.textContent = event.target.value
+    event.target.nextElementSibling.hidden = false;
+    event.target.hidden = true;
+    console.log(3)
   }
 }
 
@@ -89,7 +93,7 @@ let selectActionTask = (event) => {
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
-// listTaskContainer.addEventListener('blur',writeChanges,true)
+listTaskContainer.addEventListener('blur',writeChanges,true)
 
 
 

@@ -1,4 +1,4 @@
-const DOUBLE_CLICK = 2;
+const DOUBLE_CLICK = 1;
 
 const addTaskButton = document.querySelector('.create-task__add');
 const textTask = document.querySelector('.create-task__text');
@@ -59,19 +59,17 @@ let editTaskText = (event) => {
 }
 
 let writeChanges = (event) => {
-  
-  console.log(event.target)
+  let currentText = event.target;
+  console.log(event)
   if(event.code === 'Enter'){
-    event.target.nextElementSibling.textContent = event.target.value
-    event.target.nextElementSibling.data = event.target.value
-    console.log('enter')
-    renderTask()
+    currentText.nextElementSibling.textContent = currentText.value
+    currentText.nextElementSibling.hidden = false;
+    currentText.hidden = true;
   }
   if(event.code === 'Escape'){
-    // event.target.nextElementSibling.textContent = event.target.nextElementSibling.data
-    // event.target.nextElementSibling.hidden = false;
-    // event.target.hidden = true;
-    // console.log('escape')
+    currentText.nextElementSibling.textContent = currentText.nextElementSibling.data
+    currentText.nextElementSibling.hidden = false;
+    currentText.hidden = true;
   }
 }
 
@@ -88,7 +86,7 @@ let selectActionTask = (event) => {
 
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
-listTaskContainer.addEventListener('keydown',writeChanges)
+// listTaskContainer.addEventListener('keydown',writeChanges)
 // listTaskContainer.addEventListener('blur',writeChanges,true)
 
 

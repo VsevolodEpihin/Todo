@@ -62,10 +62,11 @@ let writeChanges = (event) => {
   
   console.log(event.target)
   if(event.code === 'Enter'){
-    event.target.nextElementSibling.textContent = event.target.value
+    event.target.nextElementSibling.innerText = event.target.value
+    event.target.nextElementSibling.hidden = false;
+    event.target.hidden = true;
     event.target.nextElementSibling.data = event.target.value
     console.log('enter')
-    renderTask()
   }
   if(event.code === 'Escape'){
     // event.target.nextElementSibling.textContent = event.target.nextElementSibling.data

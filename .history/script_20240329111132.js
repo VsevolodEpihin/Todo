@@ -60,11 +60,19 @@ let editTaskText = (event) => {
 
 let writeChanges = (event) => {
   
-  console.log(event.target)
+  console.log(event)
   if(event.code === 'Enter'){
-    event.target.nextElementSibling.textContent = event.target.value
-    event.target.nextElementSibling.data = event.target.value
-    console.log('enter')
+    // event.target.nextElementSibling.textContent = event.target.value
+    // event.target.nextElementSibling.hidden = false;
+    // event.target.hidden = true;
+    // event.target.nextElementSibling.data = event.target.value
+    // console.log('enter')
+
+    tasks = tasks.map((task)=>{
+      if(task.id === Number(event.target.parentNode.id)){
+        task.text = event.target.value;
+      }
+    })
     renderTask()
   }
   if(event.code === 'Escape'){

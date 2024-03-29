@@ -59,20 +59,18 @@ let editTaskText = (event) => {
 }
 
 let writeChanges = (event) => {
-  
-  console.log(event.target)
+  let currentText = event.target;
+  console.log(event)
   if(event.code === 'Enter'){
-    event.target.nextElementSibling.textContent = event.target.value
-    event.target.nextElementSibling.data = event.target.value
-    console.log('enter')
-    renderTask()
+    currentText.nextElementSibling.textContent = currentText.value
+    currentText.nextElementSibling.hidden = false;
+    currentText.hidden = true;
   }
-  if(event.code === 'Escape'){
-    // event.target.nextElementSibling.textContent = event.target.nextElementSibling.data
-    // event.target.nextElementSibling.hidden = false;
-    // event.target.hidden = true;
-    // console.log('escape')
-  }
+  // if(event.code === 'Escape'){
+  //   currentText.nextElementSibling.textContent = currentText.nextElementSibling.data
+  //   currentText.nextElementSibling.hidden = false;
+  //   currentText.hidden = true;
+  // }
 }
 
 

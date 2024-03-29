@@ -60,19 +60,22 @@ let editTaskText = (event) => {
 
 let writeChanges = (event) => {
   
-  console.log(event.target)
+  console.log(event)
   if(event.code === 'Enter'){
     event.target.nextElementSibling.textContent = event.target.value
+    event.target.nextElementSibling.hidden = false;
+    event.target.hidden = true;
     event.target.nextElementSibling.data = event.target.value
-    console.log('enter')
-    renderTask()
   }
   if(event.code === 'Escape'){
-    // event.target.nextElementSibling.textContent = event.target.nextElementSibling.data
-    // event.target.nextElementSibling.hidden = false;
-    // event.target.hidden = true;
-    // console.log('escape')
+    event.target.nextElementSibling.textContent = event.target.nextElementSibling.data
+    event.target.nextElementSibling.hidden = false;
+    event.target.hidden = true;
   }
+}
+
+let writeChangesBlur = (event) => {
+  console.log(event)
 }
 
 
@@ -89,7 +92,7 @@ let selectActionTask = (event) => {
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
-// listTaskContainer.addEventListener('blur',writeChanges,true)
+listTaskContainer.addEventListener('blur',writeChangesBlur,true)
 
 
 
