@@ -137,15 +137,7 @@ const renderTaskActive = (copyTask,parentCurrentTarget) => {
   renderTask(copyTask)
 } 
 const addActiveStyle = (parentCurrentTarget) => {
-  console.log(parentCurrentTarget,optionButtons.children)
-  Array.from(optionButtons.children).forEach((elem)=>{
-    if(elem.name === parentCurrentTarget.name){
-      elem.classList.add('active-tab')
-    }else{
-      elem.classList.remove('active-tab')
-    }
-
-  })
+  console.log(parentCurrentTarget,optionButtons)
 }
 
 const typeFilter = (event)=> {

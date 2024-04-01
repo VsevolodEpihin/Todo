@@ -24,7 +24,6 @@ const renderTask = (copyTask) => {
   });
 
   listTaskContainer.innerHTML = listTask;
-  counterTasks()
 };
 
 const addTask = () => {
@@ -40,34 +39,31 @@ const addTask = () => {
   };
 };
 
-let addTaskWithEnter = (event) => {//
+let addTaskWithEnter = (event) => {
   if (event.code ==='Enter' && textTask.value) {
     addTask()
   };
 }
 
-let removeTask = (event) => {//
+let removeTask = (event) => {
     tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
     renderTask();
 };
 
-const renderTaskCompleted = (copyTask,parentCurrentTarget) => {//
-  copyTask = copyTask.filter((task)=> task.isChecked)
-  renderTask(copyTask)
-}
-
-let markTask = (event) => {//?
-     tasks.forEach((task)=>{
+let markTask = (event) => {
+     tasks.map((task)=>{
       if(Number(event.target.parentNode.id) === task.id){
         task.isChecked = event.target.checked
       }
     })
     let copyTask = tasks.every((elem)=>elem.isChecked)
     checkAllTasks.checked = (copyTask) ? true:false 
+      
+ 
     renderTask()
 }
 
-let editTaskText = (event) => {//
+let editTaskText = (event) => {
   if(event.detail === DOUBLE_CLICK){
     event.target.hidden = true;
     event.target.previousElementSibling.hidden = false;
@@ -75,7 +71,7 @@ let editTaskText = (event) => {//
   }
 }
 
-let changeTextInTasks = (event) => {//
+let changeTextInTasks = (event) => {
   if(event.target.value){
     tasks.forEach((task) => {
       if(Number(event.target.parentNode.id) === task.id){
@@ -86,7 +82,7 @@ let changeTextInTasks = (event) => {//
  
 }
 
-let writeChanges = (event) => {//
+let writeChanges = (event) => {
   if(event.code === 'Enter'){
     changeTextInTasks(event)
     renderTask()
@@ -96,33 +92,20 @@ let writeChanges = (event) => {//
   }
 }
 
-let writeChangesBlur = (event) => {//
+let writeChangesBlur = (event) => {
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
     renderTask()
 }
 
-let selectActionTask = (event) => {//
+let selectActionTask = (event) => {
   if (event.target.type === 'button') removeTask(event)
   if (event.target.type === 'checkbox') markTask(event)
   if (event.target.tagName === 'SPAN') editTaskText(event)
 }
 
-let counterTasks = () => {
-  let allTasks = tasks.length;
-  let activeTasks = tasks.filter((task)=>!task.isChecked).length;
-  let completedTasks = tasks.filter((task)=>task.isChecked).length;
-
-  console.log(allTasks,activeTasks,completedTasks)
-
-  optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
-  optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
-  optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
-
-}
-
-let markAllTask = (event) => {//
+let markAllTask = (event) => {
   console.log(event.target)
   tasks.forEach((elem)=>{
     elem.isChecked = event.target.checked;
@@ -130,39 +113,26 @@ let markAllTask = (event) => {//
   renderTask()
 }
 
-
 const renderTaskActive = (copyTask,parentCurrentTarget) => {
-  console.log(parentCurrentTarget.firstElementChild)
   copyTask = copyTask.filter((task)=> !task.isChecked)
+  console.log(parentCurrentTarget.firstElementChild)
+  parentCurrentTarget.firstElement.textContent = copyTask.length;
   renderTask(copyTask)
 } 
-const addActiveStyle = (parentCurrentTarget) => {
-  console.log(parentCurrentTarget,optionButtons.children)
-  Array.from(optionButtons.children).forEach((elem)=>{
-    if(elem.name === parentCurrentTarget.name){
-      elem.classList.add('active-tab')
-    }else{
-      elem.classList.remove('active-tab')
-    }
 
-  })
+const renderTaskCompleted = (copyTask,parentCurrentTarget) => {
+  copyTask = copyTask.filter((task)=> task.isChecked)
+  parentCurrentTarget.firstElement.textContent = copyTask.length;
+  renderTask(copyTask)
 }
 
 const typeFilter = (event)=> {
   let parentCurrentTarget = (event.target.tagName === 'SPAN') ? event.target.parentNode:event.target
   let copyTasks = [...tasks]
-  if(parentCurrentTarget.name === 'check-all'){
-    renderTask(copyTasks,parentCurrentTarget)
-    addActiveStyle(parentCurrentTarget)
-  }
-  if(parentCurrentTarget.name === 'check-active'){
-    renderTaskActive(copyTasks,parentCurrentTarget)
-    addActiveStyle(parentCurrentTarget)
-  } 
-  if(parentCurrentTarget.name === 'check-completed') {
-    renderTaskCompleted(copyTasks,parentCurrentTarget)
-    addActiveStyle(parentCurrentTarget)
-  }
+  if(parentCurrentTarget.name === 'check-all') renderTask(copyTasks,parentCurrentTarget)
+  if(parentCurrentTarget.name === 'check-active') renderTaskActive(copyTasks,parentCurrentTarget)
+  if(parentCurrentTarget.name === 'check-completed') renderTaskCompleted(copyTasks,parentCurrentTarget)
+
 }
 
 let deleteCompletedTasks = (event) => {
