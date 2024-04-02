@@ -15,8 +15,10 @@ let tab = 'check-all';
 let currentPage = 1;
 
 const changeCurrentPage = (event) => {
+  if(event.target !== paginationButtons){
     currentPage = Number(event.target.textContent)
     renderTask()
+  }
 }
 
 const slicer = (tasks) =>{
@@ -77,29 +79,12 @@ const renderTask = () => {
   counterTasks()
 };
 
-const validateValue = (textEdit) => {
-  let text = textEdit ?? textTask.value.trim();
-// let reg = /[\.\<\!\?\@\#\$\%\^\:]/g
-  let specialSymbols ={
-    '@':'&#64;',
-    '?':'&#63;',
-    '#':'&#35;',
-    '!':'&#33;',
-    '%':'&#37;',
-    '^':'&#708;',
-    ':':'&#58;',
-    '$':'&#36;',
-    '<':'&#lsaquo;',
-  }
-  for(let key in specialSymbols){
-    if(text.split().includes(key)){
-
-    }
-  }
-  if(text){
+const validateValue = () => {
+  if(textTask.value.trim()){
     return true
-  }
+  }else{
     return false
+  }
 }
 
 const addTask = () => {
@@ -118,7 +103,7 @@ const addTask = () => {
   };
   currentPage = Math.ceil(tasks.length/TASKS_ON_PAGE)
   renderTask()
-  currentPage = 1;
+  changeCurrentPage()
 };
 
 const addTaskWithEnter = (event) => {//
@@ -132,7 +117,7 @@ const addTaskWithEnter = (event) => {//
 const removeTask = (event) => {//
     tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
     renderTask();
-    // addActiveStyle(optionButtons.firstElementChild)
+    addActiveStyle(optionButtons.firstElementChild)
 };
 
 
@@ -160,11 +145,8 @@ const editTaskText = (event) => {//
   }
 }
 
-const changeTextInTasks = (event) => {////////////
-  
-  let str = event.target.value.trim()
-  let validate = validateValue(str)
-  if(validate){
+const changeTextInTasks = (event) => {//
+  if(event.target.value){
     tasks.forEach((task) => {
       if(Number(event.target.parentNode.id) === task.id){
         task.text = event.target.value;
@@ -179,12 +161,13 @@ const writeChanges = (event) => {//
     renderTask()
   }
   if(event.code === 'Escape'){
-    changeTextInTasks(event)
     renderTask()
   }
 }
 
 const writeChangesBlur = (event) => {//
+  console.log(event.target.value)
+
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }

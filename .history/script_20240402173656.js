@@ -96,10 +96,14 @@ const validateValue = (textEdit) => {
 
     }
   }
+ 
+
+  
   if(text){
     return true
-  }
+  }else{
     return false
+  }
 }
 
 const addTask = () => {

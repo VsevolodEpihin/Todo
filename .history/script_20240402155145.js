@@ -15,8 +15,11 @@ let tab = 'check-all';
 let currentPage = 1;
 
 const changeCurrentPage = (event) => {
+ 
+  
     currentPage = Number(event.target.textContent)
     renderTask()
+  
 }
 
 const slicer = (tasks) =>{
@@ -78,28 +81,14 @@ const renderTask = () => {
 };
 
 const validateValue = (textEdit) => {
-  let text = textEdit ?? textTask.value.trim();
-// let reg = /[\.\<\!\?\@\#\$\%\^\:]/g
-  let specialSymbols ={
-    '@':'&#64;',
-    '?':'&#63;',
-    '#':'&#35;',
-    '!':'&#33;',
-    '%':'&#37;',
-    '^':'&#708;',
-    ':':'&#58;',
-    '$':'&#36;',
-    '<':'&#lsaquo;',
-  }
-  for(let key in specialSymbols){
-    if(text.split().includes(key)){
-
-    }
-  }
+ 
+  let text = textEdit || textTask;
+ 
   if(text){
     return true
-  }
+  }else{
     return false
+  }
 }
 
 const addTask = () => {
@@ -132,7 +121,7 @@ const addTaskWithEnter = (event) => {//
 const removeTask = (event) => {//
     tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
     renderTask();
-    // addActiveStyle(optionButtons.firstElementChild)
+    addActiveStyle(optionButtons.firstElementChild)
 };
 
 
@@ -163,8 +152,12 @@ const editTaskText = (event) => {//
 const changeTextInTasks = (event) => {////////////
   
   let str = event.target.value.trim()
+  console.log(str)
   let validate = validateValue(str)
+  console.log(validate)
+  
   if(validate){
+    console.log(1)
     tasks.forEach((task) => {
       if(Number(event.target.parentNode.id) === task.id){
         task.text = event.target.value;
@@ -185,6 +178,8 @@ const writeChanges = (event) => {//
 }
 
 const writeChangesBlur = (event) => {//
+  console.log(event.target.value)
+  
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
