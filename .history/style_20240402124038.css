@@ -94,7 +94,6 @@ li span{
 
 .task-container{
     display: flex;
- 
 }
 
 .active-tab{
@@ -121,7 +120,6 @@ li span{
 li span{
     text-align: left;
     padding-left: 10px;
-    width: 200px;
 }
 
 .delete-all-tasks{
@@ -141,13 +139,12 @@ li span{
 
 .pagination-buttons button{
     border: none;
-   margin: 0 5px;
-   padding: 10px 20px;
-   border-radius: 20px;
-   
+    display: none;
     
 }
-
+.no-active{
+    display: block;
+}
 
 .is-active{
     background-color: brown;

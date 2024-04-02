@@ -94,7 +94,7 @@ li span{
 
 .task-container{
     display: flex;
- 
+    width: 80%;
 }
 
 .active-tab{

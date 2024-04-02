@@ -79,17 +79,8 @@ const renderTask = () => {
   counterTasks()
 };
 
-const validateValue = () => {
-  if(textTask.value.trim()){
-    return true
-  }else{
-    return false
-  }
-}
-
 const addTask = () => {
-  let validate = validateValue()
-  if (validate) {
+  if (textTask.value) {
     tab='check-all';
     addActiveStyle(optionButtons.firstElementChild)
     let task = {
@@ -107,8 +98,7 @@ const addTask = () => {
 };
 
 const addTaskWithEnter = (event) => {//
-  let validate = validateValue()
-  if (event.code ==='Enter' && textTask.value && validate) {
+  if (event.code ==='Enter' && textTask.value) {
     tab='check-all';
     addTask()
   };
@@ -166,8 +156,6 @@ const writeChanges = (event) => {//
 }
 
 const writeChangesBlur = (event) => {//
-  console.log(event.target.value)
-
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
@@ -188,6 +176,7 @@ const counterTasks = () => {
   optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
   optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
   optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
+
 }
 
 const markAllTask = (event) => {//
@@ -205,12 +194,13 @@ const addActiveStyle = (parentCurrentTarget) => {
     }else{
       elem.classList.remove('active-tab')
     }
+
   })
 }
 
 const typeFilter = (event)=> {
   let parent = event.target;
-  if(parent.tagName === "SPAN") parent = event.target.parentNode
+  if(event.target.tagName === "SPAN") parent = event.target.parentNode
   addActiveStyle(parent)
   tab = parent.id
   currentPage = 1;
@@ -225,8 +215,8 @@ const deleteCompletedTasks = () => {
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
-textTask.addEventListener('keydown',addTaskWithEnter)
 listTaskContainer.addEventListener('blur',writeChangesBlur,true)
+textTask.addEventListener('keydown',addTaskWithEnter)
 checkAllTasks.addEventListener('change',markAllTask)
 deleteCompletedTaskButton.addEventListener('click',deleteCompletedTasks)
 optionButtons.addEventListener('click',typeFilter)

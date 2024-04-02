@@ -1,5 +1,4 @@
 const DOUBLE_CLICK = 2;
-const TASKS_ON_PAGE = 5;
 
 const addTaskButton = document.querySelector('.add-task');
 const textTask = document.querySelector('.text');
@@ -8,90 +7,28 @@ const todoContainer = document.querySelector('.todo')
 const checkAllTasks = document.querySelector('.check-all-tasks')
 const deleteCompletedTaskButton = document.querySelector('.delete-all-tasks')
 const optionButtons = document.querySelector('.btn-options')
-const paginationButtons = document.querySelector('.pagination-buttons')
 
 let tasks = [];
-let tab = 'check-all';
-let currentPage = 1;
 
-const changeCurrentPage = (event) => {
-  if(event.target !== paginationButtons){
-    currentPage = Number(event.target.textContent)
-    renderTask()
-  }
-}
-
-const slicer = (tasks) =>{
-  let end = currentPage*TASKS_ON_PAGE 
-  let start = end-TASKS_ON_PAGE 
-  return tasks.slice(start,end)
-}
-
-const pagination = (tasks) => { 
-  let pages = Math.ceil(tasks.length / TASKS_ON_PAGE);
-  let btnPaginate = '';
-  for(let i = 1; i <= pages; i++){
-    btnPaginate+=`<button id="paginate-${i}">${i}</button>`
-  }
-  paginationButtons.innerHTML = btnPaginate;
-}
-
-const showTaskTab = () => {
-  if(tab === 'check-all'){
-    return tasks
-  }
-  if(tab === 'check-active'){
-    return tasks.filter((task)=>!task.isChecked)
-  }
-  if(tab === 'check-completed'){
-    return tasks.filter((task)=>task.isChecked) 
-  }
-}
-
-const changeStyleActivePaginate = () => {
-  let buttons = Array.from(paginationButtons.children)
-  buttons.forEach((btn)=>{
-    if(currentPage === Number(btn.textContent)){
-      btn.classList.add('is-active')
-    }else{
-      btn.classList.remove('is-active')
-    }
-  })
-}
-
-const renderTask = () => {
-  let currentListTasks = showTaskTab()
-  pagination(currentListTasks)
-  let tasksForRender = slicer(currentListTasks)
+const renderTask = (copyTask) => {
+  
   let listTask = '';
-  tasksForRender.forEach((task) => {
+  (copyTask || tasks).forEach((task) => {
     listTask += `
       <li id=${task.id}>
-        <input type="checkbox" ${task.isChecked ? "checked":""}/> 
-        <input class="i-1" width="50px" hidden/>
+        <input type='checkbox' ${task.isChecked ? 'checked':''}/> 
+        <input class='i-1' width='50px' hidden/>
         <span>${task.text}</span>
-        <button type="button" class="remove-task">x</button>
+        <button type='button' class='remove-task'>x</button>
       </li>`;
   });
 
   listTaskContainer.innerHTML = listTask;
-  changeStyleActivePaginate()
   counterTasks()
 };
 
-const validateValue = () => {
-  if(textTask.value.trim()){
-    return true
-  }else{
-    return false
-  }
-}
-
 const addTask = () => {
-  let validate = validateValue()
-  if (validate) {
-    tab='check-all';
-    addActiveStyle(optionButtons.firstElementChild)
+  if (textTask.value) {
     let task = {
       id: Date.now(),
       isChecked: false,
@@ -100,44 +37,39 @@ const addTask = () => {
     tasks.push(task);
     renderTask();
     textTask.value = '';
+    addActiveStyle(optionButtons.firstElementChild)
   };
-  currentPage = Math.ceil(tasks.length/TASKS_ON_PAGE)
-  renderTask()
-  changeCurrentPage()
 };
 
-const addTaskWithEnter = (event) => {//
-  let validate = validateValue()
-  if (event.code ==='Enter' && textTask.value && validate) {
-    tab='check-all';
+let addTaskWithEnter = (event) => {//
+  if (event.code ==='Enter' && textTask.value) {
     addTask()
   };
 }
 
-const removeTask = (event) => {//
+let removeTask = (event) => {//
     tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
     renderTask();
     addActiveStyle(optionButtons.firstElementChild)
 };
 
-
-
-const changeGlobalCheckbox = () => {
-  let copyTask = tasks.every((task)=>task.isChecked)
-    checkAllTasks.checked = (copyTask) ? true:false 
-    renderTask()
+const renderTaskCompleted = (copyTask,parentCurrentTarget) => {//
+  copyTask = copyTask.filter((task)=> task.isChecked)
+  renderTask(copyTask)
 }
 
-const markTask = (event,currentCopyList) => {//?
+let markTask = (event,currentCopyList) => {//?
      tasks.forEach((task)=>{
       if(Number(event.target.parentNode.id) === task.id){
         task.isChecked = event.target.checked
       }
     })
+    let copyTask = tasks.every((elem)=>elem.isChecked)
+    checkAllTasks.checked = (copyTask) ? true:false 
     renderTask()
 }
 
-const editTaskText = (event) => {//
+let editTaskText = (event) => {//
   if(event.detail === DOUBLE_CLICK){
     event.target.hidden = true;
     event.target.previousElementSibling.hidden = false;
@@ -145,7 +77,7 @@ const editTaskText = (event) => {//
   }
 }
 
-const changeTextInTasks = (event) => {//
+let changeTextInTasks = (event) => {//
   if(event.target.value){
     tasks.forEach((task) => {
       if(Number(event.target.parentNode.id) === task.id){
@@ -153,9 +85,10 @@ const changeTextInTasks = (event) => {//
       }
     })
   }
+ 
 }
 
-const writeChanges = (event) => {//
+let writeChanges = (event) => {//
   if(event.code === 'Enter'){
     changeTextInTasks(event)
     renderTask()
@@ -165,32 +98,34 @@ const writeChanges = (event) => {//
   }
 }
 
-const writeChangesBlur = (event) => {//
-  console.log(event.target.value)
-
+let writeChangesBlur = (event) => {//
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
     renderTask()
 }
 
-const selectActionTask = (event) => {//
+let selectActionTask = (event) => {//
   if (event.target.type === 'button') removeTask(event)
   if (event.target.type === 'checkbox') markTask(event)
   if (event.target.tagName === 'SPAN') editTaskText(event)
 }
 
-const counterTasks = () => {
+let counterTasks = () => {
   let allTasks = tasks.length;
   let activeTasks = tasks.filter((task)=>!task.isChecked).length;
   let completedTasks = tasks.filter((task)=>task.isChecked).length;
 
+  console.log(allTasks,activeTasks,completedTasks)
+
   optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
   optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
   optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
+
 }
 
-const markAllTask = (event) => {//
+let markAllTask = (event) => {//
+  console.log(event.target)
   tasks.forEach((elem)=>{
     elem.isChecked = event.target.checked;
   })
@@ -198,36 +133,52 @@ const markAllTask = (event) => {//
   addActiveStyle(optionButtons.firstElementChild)
 }
 
+const renderTaskActive = (copyTask,parentCurrentTarget) => {
+  console.log(parentCurrentTarget.firstElementChild)
+  copyTask = copyTask.filter((task)=> !task.isChecked)
+  renderTask(copyTask)
+} 
 const addActiveStyle = (parentCurrentTarget) => {
+  console.log(parentCurrentTarget,optionButtons.children)
   Array.from(optionButtons.children).forEach((elem)=>{
     if(elem.name === parentCurrentTarget.name){
       elem.classList.add('active-tab')
     }else{
       elem.classList.remove('active-tab')
     }
+
   })
 }
 
 const typeFilter = (event)=> {
-  let parent = event.target;
-  if(parent.tagName === "SPAN") parent = event.target.parentNode
-  addActiveStyle(parent)
-  tab = parent.id
-  currentPage = 1;
-  renderTask()
+  let parentCurrentTarget = (event.target.tagName === 'SPAN') ? event.target.parentNode:event.target
+  let copyTasks = [...tasks]
+  if(parentCurrentTarget.name === 'check-all'){
+    renderTask(copyTasks,parentCurrentTarget)
+    addActiveStyle(parentCurrentTarget)
+  }
+  if(parentCurrentTarget.name === 'check-active'){
+    renderTaskActive(copyTasks,parentCurrentTarget)
+    addActiveStyle(parentCurrentTarget)
+  } 
+  if(parentCurrentTarget.name === 'check-completed') {
+    renderTaskCompleted(copyTasks,parentCurrentTarget)
+    addActiveStyle(parentCurrentTarget)
+  }
 }
 
-const deleteCompletedTasks = () => {
+let deleteCompletedTasks = (event) => {
   tasks = tasks.filter((elem)=> !elem.isChecked)
   renderTask()
+  deleteCompletedTaskButton.checked = false;
+  checkAllTasks.checked = false;
 }
 
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
-textTask.addEventListener('keydown',addTaskWithEnter)
 listTaskContainer.addEventListener('blur',writeChangesBlur,true)
+textTask.addEventListener('keydown',addTaskWithEnter)
 checkAllTasks.addEventListener('change',markAllTask)
 deleteCompletedTaskButton.addEventListener('click',deleteCompletedTasks)
 optionButtons.addEventListener('click',typeFilter)
-paginationButtons.addEventListener('click',changeCurrentPage)

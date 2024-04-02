@@ -171,7 +171,7 @@ const writeChangesBlur = (event) => {//
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
-    renderTask()
+    // renderTask()
 }
 
 const selectActionTask = (event) => {//

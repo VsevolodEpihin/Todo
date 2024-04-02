@@ -80,16 +80,12 @@ const renderTask = () => {
 };
 
 const validateValue = () => {
-  if(textTask.value.trim()){
-    return true
-  }else{
-    return false
-  }
+  if(textTask.value)
 }
 
 const addTask = () => {
   let validate = validateValue()
-  if (validate) {
+  if (textTask.value) {
     tab='check-all';
     addActiveStyle(optionButtons.firstElementChild)
     let task = {
@@ -107,8 +103,7 @@ const addTask = () => {
 };
 
 const addTaskWithEnter = (event) => {//
-  let validate = validateValue()
-  if (event.code ==='Enter' && textTask.value && validate) {
+  if (event.code ==='Enter' && textTask.value) {
     tab='check-all';
     addTask()
   };
@@ -166,8 +161,6 @@ const writeChanges = (event) => {//
 }
 
 const writeChangesBlur = (event) => {//
-  console.log(event.target.value)
-
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
@@ -225,8 +218,8 @@ const deleteCompletedTasks = () => {
 addTaskButton.addEventListener('click', addTask);
 listTaskContainer.addEventListener('click', selectActionTask);
 listTaskContainer.addEventListener('keydown',writeChanges)
-textTask.addEventListener('keydown',addTaskWithEnter)
 listTaskContainer.addEventListener('blur',writeChangesBlur,true)
+textTask.addEventListener('keydown',addTaskWithEnter)
 checkAllTasks.addEventListener('change',markAllTask)
 deleteCompletedTaskButton.addEventListener('click',deleteCompletedTasks)
 optionButtons.addEventListener('click',typeFilter)

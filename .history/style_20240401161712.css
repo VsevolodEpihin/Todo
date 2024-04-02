@@ -34,7 +34,6 @@ body{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     background-color: rgb(226, 223, 223);
-    background-color: rgb(224, 79, 79);
 }
 
 li{
@@ -71,7 +70,6 @@ li button{
     width: 20px;
     height: 20px;
     margin-left: auto;
-    cursor: pointer;
 }
 li{
     align-items: center;
@@ -94,7 +92,6 @@ li span{
 
 .task-container{
     display: flex;
- 
 }
 
 .active-tab{
@@ -120,35 +117,12 @@ li span{
 }
 li span{
     text-align: left;
-    padding-left: 10px;
-    width: 200px;
 }
 
 .delete-all-tasks{
     margin-top: 30px;
-    background: rgb(242, 131, 131);
+    background: rgb(235, 149, 149);
     padding: 10px 30px;
     border: none;
     border-radius: 10px;
-}
-
-.add-task{
-    cursor: pointer;
-}
-.pagination-buttons{
-    margin-top: 10px;
-}
-
-.pagination-buttons button{
-    border: none;
-   margin: 0 5px;
-   padding: 10px 20px;
-   border-radius: 20px;
-   
-    
-}
-
-
-.is-active{
-    background-color: brown;
 }

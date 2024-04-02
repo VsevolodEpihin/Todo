@@ -167,7 +167,7 @@ const writeChanges = (event) => {//
 
 const writeChangesBlur = (event) => {//
   console.log(event.target.value)
-
+  changeTextInTasks(event)
     if(event.target.value && event.target.type!=='checkbox'){
       changeTextInTasks(event)
     }
