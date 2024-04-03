@@ -15,6 +15,8 @@ let tasks = [];
 let tab = 'check-all';
 let currentPage = 1;
 
+
+
 const slicer = (tasks) => {
   let k = Math.ceil(tasks.length / TASKS_ON_PAGE);
   if (currentPage > k) {
@@ -149,10 +151,12 @@ const addTaskWithEnter = (event) => {
 const removeTask = (event) => {
   tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
   renderTask();
+  // addActiveStyle(optionButtons.firstElementChild)
 };
 
 const changeGlobalCheckbox = () => {
   let copyTask = tasks.every((task) => task.isChecked);
+  // checkAllTasks.checked = (copyTask) ? true : false;
   checkAllTasks.checked = copyTask;
   console.log(checkAllTasks.checked)
   renderTask();

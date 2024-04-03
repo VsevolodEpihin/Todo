@@ -15,6 +15,11 @@ let tasks = [];
 let tab = 'check-all';
 let currentPage = 1;
 
+const changeCurrentPage = (event) => {
+  currentPage = Number(event.target.textContent)
+  renderTask();
+};
+
 const slicer = (tasks) => {
   let k = Math.ceil(tasks.length / TASKS_ON_PAGE);
   if (currentPage > k) {
@@ -49,14 +54,12 @@ const showTaskTab = () => {
 
 const changeStyleActivePaginate = () => {
   let buttons = Array.from(paginationButtons.children);
-  console.log(buttons)
   buttons.forEach((btn) => {
     if (currentPage === Number(btn.textContent)) {
       btn.classList.add('is-active');
       console.log(btn)
-    }else{
-      btn.classList.remove('is-active');
     }
+    btn.classList.remove('is-active');
   });
 };
 
@@ -79,11 +82,6 @@ const renderTask = () => {
   listTaskContainer.innerHTML = listTask;
   changeStyleActivePaginate();
   counterTasks();
-};
-
-const changeCurrentPage = (event) => {
-  currentPage = Number(event.target.textContent)
-  renderTask();
 };
 
 const shieldingSymbols = (text) => {
@@ -111,8 +109,8 @@ const shieldingSymbols = (text) => {
 };
 
 const validateValue = (textEdit) => {
-  let text = textEdit ?? textTask.value.trim();
-  let shielding = shieldingSymbols(text);
+  const text = textEdit ?? textTask.value.trim();
+  const shielding = shieldingSymbols(text);
   if (shielding && shielding.length < MAX_SYMBOLS_TASK) {
     return shielding;
   }
@@ -120,7 +118,7 @@ const validateValue = (textEdit) => {
 };
 
 const addTask = () => {
-  let validate = validateValue();
+  const validate = validateValue();
   if (validate) {
     tab = 'check-all';
     const task = {
@@ -134,29 +132,28 @@ const addTask = () => {
   }
   currentPage = Math.ceil(tasks.length / TASKS_ON_PAGE);
   addActiveStyle(optionButtons.firstElementChild);
-  changeGlobalCheckbox()
   renderTask();
 };
 
 const addTaskWithEnter = (event) => {
-  let validate = validateValue();
+  const validate = validateValue();
   if (event.code === 'Enter' && textTask.value && validate) {
     tab = 'check-all';
     addTask();
   }
 };
 
-const removeTask = (event) => {
+const removeTask = (event) => {//
   tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
   renderTask();
+  // addActiveStyle(optionButtons.firstElementChild)
 };
 
 const changeGlobalCheckbox = () => {
-  let copyTask = tasks.every((task) => task.isChecked);
-  checkAllTasks.checked = copyTask;
-  console.log(checkAllTasks.checked)
+  const copyTask = tasks.every((task) => task.isChecked);
+  checkAllTasks.checked = (copyTask) ? true : false;
   renderTask();
-};
+}
 
 const markTask = (event) => {
   tasks.forEach((task) => {
@@ -164,7 +161,6 @@ const markTask = (event) => {
       task.isChecked = event.target.checked;
     }
   });
-  changeGlobalCheckbox()
   renderTask();
 };
 
@@ -233,11 +229,9 @@ const addActiveStyle = (parentCurrentTarget) => {
 };
 
 const markAllTask = (event) => {
-  console.log(tasks)
   tasks.forEach((elem) => {
     elem.isChecked = event.target.checked;
   });
-  changeGlobalCheckbox()
   renderTask();
   addActiveStyle(optionButtons.firstElementChild);
 };

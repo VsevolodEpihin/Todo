@@ -9,8 +9,8 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "no-param-reassign":"off",
-        // "prefer-const":"off",
+        // "no-param-reassign":"off",
+        "prefer-const":"off",
         // "no-useless-return":"off",
         // "no-else-return":"off",
         // "no-console":"off",
