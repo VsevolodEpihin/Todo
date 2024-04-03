@@ -166,7 +166,7 @@
         task.isChecked = parent.firstElementChild.checked;
       }
     });
-    changeGlobalCheckbox()
+    // changeGlobalCheckbox()
     renderTask();
   };
   
@@ -175,7 +175,6 @@
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
     }
   };
   
@@ -197,13 +196,12 @@
       renderTask();
     }
     if (event.code === ESCAPE) {
-      // changeTextInTasks(event);
+      changeTextInTasks(event);
       renderTask();
     }
   }
   
   const writeChangesBlur = (event) => {
-    console.log(event.target)
     if (event.target.value && event.target.type !== 'checkbox') {
       changeTextInTasks(event);
     }
@@ -222,8 +220,8 @@
     let completedTasks = allTasks - activeTasks;
   
     optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
-    optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
-    optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
+    optionButtons.lastElementChild.firstElementChild.textContent = activeTasks
+    optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = completedTasks;
   };
   
   const addActiveStyle = (parentCurrentTarget) => {
@@ -256,7 +254,6 @@
   
   const deleteCompletedTasks = () => {
     tasks = tasks.filter((elem) => !elem.isChecked);
-    checkAllTasks.checked = false;
     renderTask();
   };
   

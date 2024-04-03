@@ -175,7 +175,6 @@
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
     }
   };
   
@@ -203,7 +202,6 @@
   }
   
   const writeChangesBlur = (event) => {
-    console.log(event.target)
     if (event.target.value && event.target.type !== 'checkbox') {
       changeTextInTasks(event);
     }

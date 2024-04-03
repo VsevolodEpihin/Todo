@@ -171,11 +171,13 @@
   };
   
   const editTaskText = (event) => {
+    console.log(event.target)
     if (event.detail === DOUBLE_CLICK) {
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
+      event.target.previousSibling.textContent = event.target.value 
+      console.log(event.target)
     }
   };
   

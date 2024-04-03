@@ -116,17 +116,6 @@
     }
     return false;
   };
-
-  const markGlobalCheckbox = (copyTask) => {
-    checkAllTasks.checked = copyTask;
-    renderTask();
-  }
-  
-  const changeGlobalCheckbox = () => {
-    let copyTask = tasks.every((task) => task.isChecked);
-    markGlobalCheckbox(copyTask)
-    renderTask();
-  };
   
   const addTask = () => {
     let validate = validateValue();
@@ -159,8 +148,19 @@
     tasks = tasks.filter((task) => Number(id) !== task.id);
     renderTask();
   };
+  const markGlobalCheckbox = (copyTask) => {
+    checkAllTasks.checked = copyTask;
+    renderTask();
+  }
+  
+  const changeGlobalCheckbox = () => {
+    let copyTask = tasks.every((task) => task.isChecked);
+    markGlobalCheckbox(copyTask)
+    renderTask();
+  };
   
   const markTask = (parent) => {
+    console.log(parent.firstElementChild)
     tasks.forEach((task) => {
       if (Number(parent.id) === task.id) {
         task.isChecked = parent.firstElementChild.checked;
@@ -175,7 +175,6 @@
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
     }
   };
   
@@ -197,13 +196,12 @@
       renderTask();
     }
     if (event.code === ESCAPE) {
-      // changeTextInTasks(event);
+      changeTextInTasks(event);
       renderTask();
     }
   }
   
   const writeChangesBlur = (event) => {
-    console.log(event.target)
     if (event.target.value && event.target.type !== 'checkbox') {
       changeTextInTasks(event);
     }
@@ -222,8 +220,8 @@
     let completedTasks = allTasks - activeTasks;
   
     optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
-    optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
-    optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
+    optionButtons.lastElementChild.firstElementChild.textContent = activeTasks
+    optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = completedTasks;
   };
   
   const addActiveStyle = (parentCurrentTarget) => {
@@ -256,7 +254,6 @@
   
   const deleteCompletedTasks = () => {
     tasks = tasks.filter((elem) => !elem.isChecked);
-    checkAllTasks.checked = false;
     renderTask();
   };
   

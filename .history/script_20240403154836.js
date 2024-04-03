@@ -175,7 +175,9 @@
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
+      console.log(event.target.parentNode.lastElementChild.previousElementSibling.value)
+
+      event.target.parentNode.firstElementChild.nextElementSibling.value = event.target.parentNode.lastElementChild.previousElementSibling.value;
     }
   };
   

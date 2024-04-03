@@ -175,7 +175,6 @@
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
     }
   };
   
@@ -197,13 +196,12 @@
       renderTask();
     }
     if (event.code === ESCAPE) {
-      // changeTextInTasks(event);
+      changeTextInTasks(event);
       renderTask();
     }
   }
   
   const writeChangesBlur = (event) => {
-    console.log(event.target)
     if (event.target.value && event.target.type !== 'checkbox') {
       changeTextInTasks(event);
     }
@@ -256,7 +254,6 @@
   
   const deleteCompletedTasks = () => {
     tasks = tasks.filter((elem) => !elem.isChecked);
-    checkAllTasks.checked = false;
     renderTask();
   };
   

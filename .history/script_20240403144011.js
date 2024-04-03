@@ -116,17 +116,6 @@
     }
     return false;
   };
-
-  const markGlobalCheckbox = (copyTask) => {
-    checkAllTasks.checked = copyTask;
-    renderTask();
-  }
-  
-  const changeGlobalCheckbox = () => {
-    let copyTask = tasks.every((task) => task.isChecked);
-    markGlobalCheckbox(copyTask)
-    renderTask();
-  };
   
   const addTask = () => {
     let validate = validateValue();
@@ -155,15 +144,25 @@
     }
   };
   
-  const removeTask = (id) => {
-    tasks = tasks.filter((task) => Number(id) !== task.id);
+  const removeTask = (event) => {
+    tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
+    renderTask();
+  };
+  const markGlobalCheckbox = (copyTask) => {
+    checkAllTasks.checked = copyTask;
+    renderTask();
+  }
+  
+  const changeGlobalCheckbox = () => {
+    let copyTask = tasks.every((task) => task.isChecked);
+    markGlobalCheckbox(copyTask)
     renderTask();
   };
   
-  const markTask = (parent) => {
+  const markTask = (event) => {
     tasks.forEach((task) => {
-      if (Number(parent.id) === task.id) {
-        task.isChecked = parent.firstElementChild.checked;
+      if (Number(event.target.parentNode.id) === task.id) {
+        task.isChecked = event.target.checked;
       }
     });
     changeGlobalCheckbox()
@@ -175,7 +174,6 @@
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
-      event.target.previousElementSibling.value = event.target.textContent;
     }
   };
   
@@ -197,13 +195,12 @@
       renderTask();
     }
     if (event.code === ESCAPE) {
-      // changeTextInTasks(event);
+      changeTextInTasks(event);
       renderTask();
     }
   }
   
   const writeChangesBlur = (event) => {
-    console.log(event.target)
     if (event.target.value && event.target.type !== 'checkbox') {
       changeTextInTasks(event);
     }
@@ -211,8 +208,8 @@
   };
   
   const selectActionTask = (event) => {
-    if (event.target.type === 'button') removeTask(event.target.parentNode.id);
-    if (event.target.type === 'checkbox') markTask(event.target.parentNode);
+    if (event.target.type === 'button') removeTask(event);
+    if (event.target.type === 'checkbox') markTask(event);
     if (event.target.tagName === 'SPAN') editTaskText(event);
   };
   
@@ -222,8 +219,8 @@
     let completedTasks = allTasks - activeTasks;
   
     optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
-    optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
-    optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
+    optionButtons.lastElementChild.firstElementChild.textContent = activeTasks
+    optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = completedTasks;
   };
   
   const addActiveStyle = (parentCurrentTarget) => {
@@ -256,7 +253,6 @@
   
   const deleteCompletedTasks = () => {
     tasks = tasks.filter((elem) => !elem.isChecked);
-    checkAllTasks.checked = false;
     renderTask();
   };
   
