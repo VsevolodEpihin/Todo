@@ -218,14 +218,17 @@ const selectActionTask = (event) => {
 const counterTasks = () => {
   let allTasks = tasks.length;
   let activeTasks = tasks.reduce((accum,task) =>{
-    if(task.isChecked) return [accum[0],accum[1]+1]
-    if(!task.isChecked) return [accum[0]+1,accum[1]]
+    let arr =[ accum[0], accum[1]]
+    if(task.isChecked) arr[0]+=1;
+    if(!task.isChecked) arr[1]+=1
+    return arr
   },[0,0])
-  console.log(activeTasks)
+  // let activeTasks = tasks.filter((task) => !task.isChecked).length;
+  // let completedTasks = tasks.filter((task) => task.isChecked).length;
 
   optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
-  optionButtons.lastElementChild.firstElementChild.textContent = activeTasks[0];
-  optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks[1];
+  optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
+  optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
 };
 
 const addActiveStyle = (parentCurrentTarget) => {

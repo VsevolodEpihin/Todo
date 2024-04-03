@@ -150,14 +150,11 @@ const removeTask = (event) => {
   tasks = tasks.filter((task) => Number(event.target.parentNode.id) !== task.id);
   renderTask();
 };
-const markGlobalCheckbox = (copyTask) => {
-  checkAllTasks.checked = copyTask;
-  renderTask();
-}
 
 const changeGlobalCheckbox = () => {
   let copyTask = tasks.every((task) => task.isChecked);
-  markGlobalCheckbox(copyTask)
+  checkAllTasks.checked = copyTask;
+  console.log(checkAllTasks.checked)
   renderTask();
 };
 
@@ -217,15 +214,12 @@ const selectActionTask = (event) => {
 
 const counterTasks = () => {
   let allTasks = tasks.length;
-  let activeTasks = tasks.reduce((accum,task) =>{
-    if(task.isChecked) return [accum[0],accum[1]+1]
-    if(!task.isChecked) return [accum[0]+1,accum[1]]
-  },[0,0])
-  console.log(activeTasks)
+  let activeTasks = tasks.filter((task) => !task.isChecked).length;
+  let completedTasks = tasks.filter((task) => task.isChecked).length;
 
   optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
-  optionButtons.lastElementChild.firstElementChild.textContent = activeTasks[0];
-  optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks[1];
+  optionButtons.lastElementChild.firstElementChild.textContent = completedTasks;
+  optionButtons.firstElementChild.nextElementSibling.firstElementChild.textContent = activeTasks;
 };
 
 const addActiveStyle = (parentCurrentTarget) => {

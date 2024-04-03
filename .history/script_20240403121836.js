@@ -222,6 +222,8 @@ const counterTasks = () => {
     if(!task.isChecked) return [accum[0]+1,accum[1]]
   },[0,0])
   console.log(activeTasks)
+  // let activeTasks = tasks.filter((task) => !task.isChecked).length;
+  // let completedTasks = tasks.filter((task) => task.isChecked).length;
 
   optionButtons.firstElementChild.firstElementChild.textContent = allTasks;
   optionButtons.lastElementChild.firstElementChild.textContent = activeTasks[0];
