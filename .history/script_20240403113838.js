@@ -237,8 +237,7 @@ const markAllTask = (event) => {
   tasks.forEach((elem) => {
     elem.isChecked = event.target.checked;
   });
-  let allCheckBox = changeGlobalCheckbox()
-  if(!allCheckBox) currentPage =1
+  changeGlobalCheckbox()
   renderTask();
   // addActiveStyle(optionButtons.firstElementChild);
 };
