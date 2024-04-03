@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./normalize.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./normalize.css">
 </head>
 <body>
   <div class="todo">
     <h1>TodoJs App</h1>
     <div class="create-task">
-      <input autofocus placeholder="Введите вашу задачу" class="text">
+      <input autofocus placeholder="Введите вашу задачу" maxlength="254" class="create-text-task">
       <button class="add-task">add</button>
     </div>
     <div class="show-tasks">
@@ -23,9 +23,7 @@
       <button id="check-active" name="check-active">Active (<span>0</span>)</button>
       <button id="check-completed" name="check-completed">Completed (<span>0</span>)</button>
     </div>
-    <div class="pagination-buttons">
-
-    </div>
+    <div class="pagination-buttons"></div>
     <button class="delete-all-tasks">Delete completed</button>
   </div>
   <script src="./script.js"></script>
