@@ -1,22 +1,109 @@
 (()=>{
+  const TIME_ERROR = 3000;
   const DOUBLE_CLICK = 2;
   const TASKS_ON_PAGE = 5;
   const ENTER = 'Enter';
   const ESCAPE = 'Escape';
+  const HOST = 'api.t2.academy.dunice-testing.com';
+  const URL = `https://${HOST}/tasks`
   
   const addTaskButton = document.querySelector('.add-task');
   const textTask = document.querySelector('.create-text-task');
   const listTaskContainer = document.querySelector('.task-container');
-  const todoContainer = document.querySelector('.todo');
   const checkAllTasks = document.querySelector('.check-all-tasks');
   const deleteCompletedTaskButton = document.querySelector('.delete-all-tasks');
   const optionButtons = document.querySelector('.btn-options');
   const paginationButtons = document.querySelector('.pagination-buttons');
-  
+  const boxError = document.querySelector('.error-box')
+
+  let eventCode = null;
   let tasks = [];
   let displayedTab = 'check-all';
   let currentPage = 1;
-  
+
+  const displayError = (message) => {
+    boxError.firstElementChild.textContent = message
+    boxError.classList.add('display-error')
+    setTimeout(()=>{
+      boxError.classList.remove('display-error')
+    },TIME_ERROR)
+  }
+
+  const checkRequest = (response) => {
+    if(!response || !response.ok){
+       throw new Error('response was not ok')
+    }
+  }
+
+  const requestGetTasks = () => {
+      fetch(`${URL}`)
+        .then(response => {
+          checkRequest(response)
+          return response.json();
+        })
+        .then(data => {
+          tasks = data
+          changeGlobalCheckbox()
+          renderTask()
+        })
+        .catch(error => {
+          displayError(error)
+        });
+  }
+
+  requestGetTasks()
+
+  const requestDeleteTask = (id) => {
+      fetch(`${URL}/${id}`,{method: 'DELETE'})
+        .then(response => {
+          checkRequest(response)
+        })
+        .then(() =>{
+          tasks = tasks.filter((task) => Number(id) !== task.id);
+          renderTask();
+        })
+        .catch(error => {
+          displayError(error)
+        });
+  }
+
+  const requestDeleteAllTask = () => {
+      fetch(`${URL}/completed`,{method: 'DELETE'})
+        .then(response => {
+          checkRequest(response)
+        })
+        .then(()=>{
+          tasks = tasks.filter((elem) => !elem.isChecked);
+          checkAllTasks.checked = false;
+          renderTask();
+        })
+        .catch(error => {
+          displayError(error)
+        });
+  }
+
+  function requestEditBody(url, method, body) {
+    const requestOptions = {
+    method: method,
+    headers: {
+    'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+    };
+    
+    return fetch(url, requestOptions)
+    .then(response => {
+      checkRequest(response)
+    return response.json();
+    })
+    .then(data => {
+    return data;
+    })
+    .catch(error => {
+    throw error;
+    });
+    }
+
   const slicer = (tasks) => {
     let changedPage = Math.ceil(tasks.length / TASKS_ON_PAGE);
     if (currentPage > changedPage) {
@@ -67,7 +154,7 @@
     tasksForRender.forEach((task) => {
       listTask += `
         <li id=${task.id}>
-          <input type="checkbox" ${task.isChecked ? 'checked' : ''}/> 
+          <input tabindex="1" type="checkbox" ${task.isChecked ? 'checked' : ''}/> 
           <input class="change-text" maxLength="254" width="50px" hidden/>
           <span>${task.text}</span>
           <button type="button" class="remove-task">x</button>
@@ -111,7 +198,7 @@
   const validateValue = (textEdit) => {
     let text = textEdit ?? textTask.value.trim();
     let shielding = shieldingSymbols(text);
-    if (shielding) {
+    if (shielding && textEdit!==textTask.value) {
       return shielding;
     }
     return false;
@@ -133,18 +220,21 @@
     if (validate) {
       displayedTab = 'check-all';
       const task = {
-        id: Date.now(),
-        isChecked: false,
         text: validate,
       };
-      tasks.push(task);
-      renderTask();
+      requestEditBody(`${URL}`, 'POST', {text: task.text})
+      .then(data => {
+      tasks.push(data)
+      currentPage = Math.ceil(tasks.length / TASKS_ON_PAGE);
+      addActiveStyle(optionButtons.firstElementChild);
+      changeGlobalCheckbox()
       textTask.value = '';
+      renderTask();
+      })
+      .catch(error => {
+      displayError(error)
+      });
     }
-    currentPage = Math.ceil(tasks.length / TASKS_ON_PAGE);
-    addActiveStyle(optionButtons.firstElementChild);
-    changeGlobalCheckbox()
-    renderTask();
   };
   
   const addTaskWithEnter = (event) => {
@@ -154,66 +244,90 @@
       addTask();
     }
   };
-  
+
   const removeTask = (id) => {
-    tasks = tasks.filter((task) => Number(id) !== task.id);
-    renderTask();
+    requestDeleteTask(id)
   };
   
   const markTask = (parent) => {
-    tasks.forEach((task) => {
-      if (Number(parent.id) === task.id) {
-        task.isChecked = parent.firstElementChild.checked;
-      }
+    requestEditBody(`${URL}/${parent.id}`, 'PATCH', {
+      isChecked: parent.firstElementChild.checked
+    })
+    .then(() => {
+      tasks.forEach((task) => {
+        if (Number(parent.id) === Number(task.id)) {
+          task.isChecked = parent.firstElementChild.checked;
+        }
+      });
+      changeGlobalCheckbox()
+      renderTask();
+    })
+    .catch(error => {
+      displayError(error)
     });
-    changeGlobalCheckbox()
-    renderTask();
   };
   
   const editTaskText = (event) => {
     if (event.detail === DOUBLE_CLICK) {
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
-      event.target.previousElementSibling.focus();
+      event.target.previousElementSibling.focus();  
       event.target.previousElementSibling.value = event.target.textContent;
-    }
+    } 
+  };
+
+  const selectActionTask = (event) => {
+    if (event.target.type === 'button') removeTask(event.target.parentNode.id);
+    if (event.target.type === 'checkbox') markTask(event.target.parentNode);
+    if (event.target.tagName === 'SPAN') editTaskText(event);
   };
   
   const changeTextInTasks = (event) => {
+     if(event.target.type === 'checkbox'){
+      event.target.checked = !event.target.checked
+      selectActionTask(event)
+     }
+    let repeatText = event.target.value === event.target.parentNode.lastElementChild.previousElementSibling.textContent
+    let id = event.target.parentNode.id;
     let str = event.target.value.trim();
     let validate = validateValue(str);
-    if (validate) {
+    if (validate && event.target.type !== 'checkbox' && !repeatText) {
+      requestEditBody(`${URL}/${id}`, 'PATCH', {text : validate})
+      .then(data => {
       tasks.forEach((task) => {
-        if (Number(event.target.parentNode.id) === task.id) {
-          task.text = validate;
+        if (Number(data.id) === task.id) {
+          task.text = data.text;
         }
+      });
+      renderTask()
+      })
+      .catch(error => {
+      displayError(error)
       });
     }
   };
   
   const writeChanges = (event) => {
-    if (event.code === ENTER) {
+    if (event.code === ENTER ) {
+      eventCode = event.code;
       changeTextInTasks(event);
       renderTask();
     }
     if (event.code === ESCAPE) {
-      // changeTextInTasks(event);
+      eventCode = event.code;
       renderTask();
     }
   }
   
   const writeChangesBlur = (event) => {
-    console.log(event.target)
-    if (event.target.value && event.target.type !== 'checkbox') {
-      changeTextInTasks(event);
+    if (event.target.value && event.target.type !== 'checkbox' && eventCode!==ESCAPE) {
+      changeTextInTasks(event)
+      renderTask();
     }
-    renderTask();
-  };
-  
-  const selectActionTask = (event) => {
-    if (event.target.type === 'button') removeTask(event.target.parentNode.id);
-    if (event.target.type === 'checkbox') markTask(event.target.parentNode);
-    if (event.target.tagName === 'SPAN') editTaskText(event);
+    if (event.target.value === '') {
+      renderTask();
+    }
+    eventCode = null;
   };
   
   const counterTasks = () => {
@@ -237,12 +351,20 @@
   };
   
   const markAllTask = (event) => {
-    tasks.forEach((elem) => {
-      elem.isChecked = event.target.checked;
+    requestEditBody(URL, 'PUT', {
+      status: event.target.checked
+    })
+    .then(() => {
+      tasks.forEach((elem) => {
+        elem.isChecked = event.target.checked;
+      });
+      let allCheckBox = changeGlobalCheckbox()
+      if(!allCheckBox) currentPage =1
+      renderTask();
+    })
+    .catch(error => {
+      displayError(error)
     });
-    let allCheckBox = changeGlobalCheckbox()
-    if(!allCheckBox) currentPage =1
-    renderTask();
   };
   
   const typeFilter = (event) => {
@@ -255,10 +377,9 @@
   }
   
   const deleteCompletedTasks = () => {
-    tasks = tasks.filter((elem) => !elem.isChecked);
-    checkAllTasks.checked = false;
-    renderTask();
+    requestDeleteAllTask()
   };
+
   
   addTaskButton.addEventListener('click', addTask);
   listTaskContainer.addEventListener('click', selectActionTask);
@@ -270,4 +391,3 @@
   optionButtons.addEventListener('click', typeFilter);
   paginationButtons.addEventListener('click', changeCurrentPage);
 })()
-

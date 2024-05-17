@@ -1,6 +1,5 @@
 body{
-    background-color: rgb(214, 98, 214);
-    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.39);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -133,4 +132,17 @@ li span{
 }
 .paginate-buttons{
     cursor: pointer;
+}
+.error-box{
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    background-color: rgba(255, 9, 9, 0.699);
+    padding: 50px;
+}
+.display-error{
+    display: block;
 }
