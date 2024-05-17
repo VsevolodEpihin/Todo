@@ -49,8 +49,6 @@
       .catch((error) => displayError(error));
   };
 
-  requestGetTasks();
-
   const requestDeleteTask = (id) => {
     fetch(`${URL}/${id}`, { method: 'DELETE' })
       .then((response) => {
@@ -364,6 +362,7 @@
     requestDeleteAllTask();
   };
 
+  document.addEventListener('DOMContentLoaded', requestGetTasks);
   addTaskButton.addEventListener('click', addTask);
   listTaskContainer.addEventListener('click', selectActionTask);
   listTaskContainer.addEventListener('keydown', writeChanges);
