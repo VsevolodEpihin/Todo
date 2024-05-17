@@ -10,6 +10,9 @@
     },
     "rules": {
          "prefer-const":"off",
+         "no-plusplus":"off",
+         "no-param-reassign":"off",
+         "max-len":"off"
         // "no-useless-return":"off",
         // "no-else-return":"off",
         // "no-console":"off",
