@@ -159,7 +159,7 @@
   };
 
   const requestGetTasks = () => {
-    fetch(`${URL}`)
+    fetch(URL)
       .then((response) => {
         checkRequest(response);
         return response.json();
@@ -206,7 +206,7 @@
       body: JSON.stringify(body),
     };
 
-    return fetch(url, requestOptions)
+    fetch(url, requestOptions)
       .then((response) => {
         checkRequest(response);
         return response.json();

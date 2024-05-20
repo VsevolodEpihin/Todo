@@ -9,7 +9,6 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-         "prefer-const":"off",
          "no-plusplus":"off",
          "no-param-reassign":"off",
          "max-len":"off"
